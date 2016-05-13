@@ -1,3 +1,15 @@
+var isLabelWorkflow = function isLabelEligible(labelText) {
+  return !!labelText.match(/\b(?:blocked|on hold|paused|^to)\b/);
+};
+
+var isLabelHighPriority = function isLabelEligible(labelText) {
+  return !!labelText.match(/\b(?:high priority)\b/);
+};
+
+var isLabelUrgentPriority = function isLabelEligible(labelText) {
+  return !!labelText.match(/\b(?:urgent priority)\b/);
+};
+
 chrome.extension.sendMessage({}, function(response) {
   var readyStateCheckInterval = setInterval(function() {
     if (document.readyState === "complete") {
@@ -20,29 +32,33 @@ chrome.extension.sendMessage({}, function(response) {
       var handleMutationEvents = function handleMutationEvents(mutation) {
         Array.prototype.forEach.call(mutation.addedNodes, styleLabelsInNode);
         styleLabelsInNode(mutation.target);
-      }
+      };
 
       var styleLabelsInNode = function styleLabelsInNode(node) {
         if (nodeIsElement(node)) {
           styleLabels(findLabelsInNode(node));
         }
-      }
+      };
 
       var nodeIsElement = function nodeIsElement(node) {
         return (typeof node.querySelectorAll !== 'undefined');
-      }
+      };
 
       var findLabelsInNode = function findLabelsInNode(node) {
         return node.querySelectorAll('a.label');
-      }
+      };
 
       var styleLabels = function styleLabels(labels) {
         Array.prototype.forEach.call(labels, function(label) {
-          if (isLabelEligible(label.textContent)) {
-            label.classList.add('blocked');
-          } else {
-            label.classList.remove('blocked');
+          if (isLabelWorkflow(label.textContent)) {
+            label.classList.add('workflow');
           }
+          else if (isLabelUrgentPriority(label.textContent)) {
+            label.classList.add('urgent-priority');
+          }
+          else if (isLabelHighPriority(label.textContent)) {
+              label.classList.add('high-priority');
+            }
         });
       }
     }

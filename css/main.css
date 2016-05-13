@@ -1,0 +1,30 @@
+.preview a.label.workflow {
+  color: white;
+  margin: 0 2px;
+  white-space: nowrap;
+  background: #203e64;
+  border-radius: 5px;
+  padding: 4px 10px;
+}
+
+.preview a.label.workflow:hover {
+  background: #11213e;
+}
+
+.preview a.label.high-priority {
+  background-color: hsl(349, 69%, 46%);
+  border-radius: 20px;
+  color: white;
+  margin: 0 2px;
+  padding: 1px 6px 1px 6px;
+  white-space: nowrap;
+}
+
+.preview a.label.urgent-priority {
+  background-color: red;
+  border-radius: 20px;
+  color: white;
+  margin: 0 2px;
+  padding: 1px 6px 1px 6px;
+  white-space: nowrap;
+}

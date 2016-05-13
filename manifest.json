@@ -1,10 +1,10 @@
 {
-  "name": "Red Labels for Pivotal Tracker",
-  "version": "1.3.0",
+  "name": "SystemSeed PT",
+  "version": "1.0",
   "manifest_version": 2,
-  "author": "Mike Kenyon",
-  "description": "Want to see which Pivotal Tracker stories you can work on? Turn any \"blocked\" or \"needs <something>\" stories red so they stand out!",
-  "homepage_url": "https://github.com/mkenyon/red-labels-for-pivotal-tracker",
+  "author": "Ev Maslovskiy",
+  "description": "Provides integration between SystemSeed workflow and Pivotal Tracker.",
+  "homepage_url": "https://github.com/spleshka/SystemSeed-PT",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -15,7 +15,10 @@
     "http://www.pivotaltracker.com/*",
     "https://www.pivotaltracker.com/*"
   ],
-  "short_name": "Red Labels",
+  "browser_action": {
+    "default_title": "SystemSeed PT",
+    "default_icon": "icons/icon16.png"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -23,11 +26,11 @@
         "https://www.pivotaltracker.com/*"
       ],
       "js": [
-        "src/inject/isLabelEligible.js",
-        "src/inject/inject.js"
+        "src/libs/jquery-2.2.3.min.js",
+        "src/main.js"
       ],
       "css": [
-        "css/inject/inject.css"
+        "css/main.css"
       ]
     }
   ]
