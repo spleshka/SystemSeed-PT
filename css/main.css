@@ -1,30 +1,23 @@
-.preview a.label.workflow {
+.preview a.label.ss {
+  border-radius: 20px;
   color: white;
   margin: 0 2px;
+  padding: 2px 7px;
   white-space: nowrap;
-  background: #203e64;
-  border-radius: 5px;
-  padding: 4px 10px;
 }
 
-.preview a.label.workflow:hover {
+.preview a.label.ss.workflow-state {
+  background: #203e64;
+}
+
+.preview a.label.ss.workflow-state:hover {
   background: #11213e;
 }
 
-.preview a.label.high-priority {
+.preview a.label.ss.important {
   background-color: hsl(349, 69%, 46%);
-  border-radius: 20px;
-  color: white;
-  margin: 0 2px;
-  padding: 1px 6px 1px 6px;
-  white-space: nowrap;
 }
 
-.preview a.label.urgent-priority {
-  background-color: red;
-  border-radius: 20px;
-  color: white;
-  margin: 0 2px;
-  padding: 1px 6px 1px 6px;
-  white-space: nowrap;
+.preview a.label.ss.missing-tags {
+  background-color: #f39300;
 }
