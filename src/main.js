@@ -25,8 +25,11 @@ chrome.extension.sendMessage({}, function(response) {
       };
 
 
+      /**
+       * Main entry point to loop through all stories and to process them.
+       */
       var processStories = function processStories(node) {
-        if (node.querySelectorAll !== 'undefined') {
+        if (typeof node.querySelectorAll !== 'undefined') {
 
           var stories = node.querySelectorAll('header.preview');
           if (!stories.length) {
@@ -35,15 +38,14 @@ chrome.extension.sendMessage({}, function(response) {
 
           // Loop through every story.
           Array.prototype.forEach.call(stories, function (story) {
-            if (!story.classList.contains('ss-processed')) {
-              highlightWorkflowStates(story);
-              highlightImportantTags(story);
-              detectMergeDeployTags(story);
-            }
-            story.classList.add('ss-processed');
+            highlightWorkflowStates(story);
+            highlightImportantTags(story);
+            detectMergeDeployTags(story);
+            detectTimeIssues(story);
           });
         }
       };
+
 
       /**
        * Highlights tags which contain workflow states.
@@ -56,6 +58,7 @@ chrome.extension.sendMessage({}, function(response) {
           }
         });
       }
+
 
       /**
        * Highlights tags which contain important labels.
@@ -77,69 +80,115 @@ chrome.extension.sendMessage({}, function(response) {
 
 
       /**
+       * Finds stories where logged time higher than estimate.
+       */
+      function detectTimeIssues(story) {
+        var estimation = story.querySelector('.meta');
+        var spentTime = story.querySelector('.everhour-stat');
+        if (estimation !== null && spentTime !== null) {
+          var pts = estimation.textContent;
+          if (pts >= 0) {
+            var time = spentTime.textContent.split(' ');
+            var minutes = 0;
+            var hours = 0;
+
+            // If time has only 1 param, means that it has only minutes.
+            // Otherwise - hours and minutes.
+            if (time.length == 1) {
+              minutes = parseInt(time[0]);
+            }
+            else {
+              hours = parseInt(time[0]);
+              minutes = parseInt(time[1]);
+            }
+
+            // Care about overrun for more than 1h more than original.
+            var estimated = pts * 4.5 * 60 + 60;
+            var current = hours * 60 + minutes;
+            if (estimated < current) {
+              if (story.querySelector('.time-overrun') === null) {
+                story.insertAdjacentHTML('beforeend', '<span class="time-overrun">overrun</span>');
+              }
+            }
+          }
+        }
+      }
+
+
+      /**
        * Checks for merging / deployment workflow.
        */
       function detectMergeDeployTags(story) {
         // We care about merging only when story is accepted.
         var storyAccepted = story.querySelector('.state.button') === null;
-        if (storyAccepted) {
+        var storyHasBody = story.querySelector('.name') !== null;
+        if (!storyAccepted || !storyHasBody) {
+          return;
+        }
 
-          var labels = story.querySelectorAll('a.label');
-          var hasBranch = false;
-          var hasToMergeTag = false;
-          var hasMergedTag = false;
-          var hasToDeployTag = false;
-          var hasDeployedTag = false;
+        // Make sure that the story has the right section and we haven't
+        // already processed it.
+        var bodySection = story.querySelector('.name');
+        var hasMissingTags = bodySection.querySelector('.missing-tags') !== null;
+        if (hasMissingTags) {
+          return;
+        }
 
-          Array.prototype.forEach.call(labels, function (label) {
+        var hasBranch = false;
+        var hasToMergeTag = false;
+        var hasMergedTag = false;
+        var hasToDeployTag = false;
+        var hasDeployedTag = false;
 
-            // Check if the label is in format "b:branchname".
-            var regexp = new RegExp('^b:', 'i');
-            if (label.textContent.match(regexp)) {
-              hasBranch = true;
-            }
+        // Loop through all labels of this story.
+        var labels = story.querySelectorAll('a.label');
+        Array.prototype.forEach.call(labels, function (label) {
 
-            // Check if the label is "to merge".
-            regexp = new RegExp('^(to merge)', 'i');
-            if (label.textContent.match(regexp)) {
-              hasToMergeTag = true;
-            }
-
-            // Check if the label is "merged".
-            regexp = new RegExp('^(merged)', 'i');
-            if (label.textContent.match(regexp)) {
-              hasMergedTag = true;
-            }
-
-            // Check if the label is "to deploy".
-            regexp = new RegExp('^(to deploy)', 'i');
-            if (label.textContent.match(regexp)) {
-              hasToDeployTag = true;
-            }
-
-            // Check if the label is "deployed".
-            regexp = new RegExp('^(deployed)', 'i');
-            if (label.textContent.match(regexp)) {
-              hasDeployedTag = true;
-            }
-          });
-
-          var warnings = [];
-
-          if (hasBranch) {
-            if (!hasToMergeTag && !hasMergedTag) {
-              warnings.push('merge');
-            }
-
-            if (!hasToDeployTag && !hasDeployedTag) {
-              warnings.push('deploy');
-            }
+          // Check if the label is in format "b:branchname".
+          var regexp = new RegExp('^b:', 'i');
+          if (label.textContent.match(regexp)) {
+            hasBranch = true;
           }
 
-          if (warnings.length) {
-            var inner = story.querySelector('.name');
-            inner.insertAdjacentHTML('beforeend', '<a class="std label ss missing-tags">notice: missing ' + warnings.join(', ') + ' tags</a>');
+          // Check if the label is "to merge".
+          regexp = new RegExp('^(to merge)', 'i');
+          if (label.textContent.match(regexp)) {
+            hasToMergeTag = true;
           }
+
+          // Check if the label is "merged".
+          regexp = new RegExp('^(merged)', 'i');
+          if (label.textContent.match(regexp)) {
+            hasMergedTag = true;
+          }
+
+          // Check if the label is "to deploy".
+          regexp = new RegExp('^(to deploy)', 'i');
+          if (label.textContent.match(regexp)) {
+            hasToDeployTag = true;
+          }
+
+          // Check if the label is "deployed".
+          regexp = new RegExp('^(deployed)', 'i');
+          if (label.textContent.match(regexp)) {
+            hasDeployedTag = true;
+          }
+        });
+
+        var warnings = [];
+
+        if (hasBranch) {
+          if (!hasToMergeTag && !hasMergedTag) {
+            warnings.push('merge');
+          }
+
+          if (!hasToDeployTag && !hasDeployedTag) {
+            warnings.push('deploy');
+          }
+        }
+
+        if (warnings.length) {
+          bodySection.insertAdjacentHTML('beforeend', '<a class="std label ss missing-tags">notice: missing ' + warnings.join(', ') + ' tags</a>');
         }
       }
     }
