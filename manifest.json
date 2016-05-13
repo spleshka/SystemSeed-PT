@@ -26,7 +26,6 @@
         "https://www.pivotaltracker.com/*"
       ],
       "js": [
-        "src/libs/jquery-2.2.3.min.js",
         "src/main.js"
       ],
       "css": [
