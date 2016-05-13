@@ -12,12 +12,16 @@
     "128": "icons/icon128.png"
   },
   "permissions": [
-    "http://www.pivotaltracker.com/*",
-    "https://www.pivotaltracker.com/*"
+    "storage",
+    "tabs",
+    "background",
+    "http://*/*",
+    "https://*/*"
   ],
   "browser_action": {
     "default_title": "SystemSeed PT",
-    "default_icon": "icons/icon16.png"
+    "default_icon": "icons/icon16.png",
+    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
@@ -26,11 +30,10 @@
         "https://www.pivotaltracker.com/*"
       ],
       "js": [
-        "src/libs/jquery-2.2.3.min.js",
-        "src/main.js"
+        "src/pivotal.js"
       ],
       "css": [
-        "css/main.css"
+        "css/pivotal.css"
       ]
     }
   ]
