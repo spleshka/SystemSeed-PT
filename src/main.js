@@ -67,7 +67,7 @@ chrome.extension.sendMessage({}, function(response) {
       function highlightImportantTags(story) {
 
         // We care about important tags as long as it is not accepted.
-        var storyAccepted = story.querySelector('.state.button') === null;
+        var storyAccepted = story.parentElement.classList.contains('accepted');
         if (!storyAccepted) {
           var labels = story.querySelectorAll('a.label');
           Array.prototype.forEach.call(labels, function(label) {
@@ -102,8 +102,8 @@ chrome.extension.sendMessage({}, function(response) {
               minutes = parseInt(time[1]);
             }
 
-            // Care about overrun for more than 1h more than original.
-            var estimated = pts * 4.5 * 60 + 60;
+            // Care only about huge overruns.
+            var estimated = pts * 6 * 60 + 60;
             var current = hours * 60 + minutes;
             if (estimated < current) {
               if (story.querySelector('.time-overrun') === null) {
