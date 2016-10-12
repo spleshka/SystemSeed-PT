@@ -71,7 +71,7 @@ chrome.extension.sendMessage({}, function(response) {
         if (!storyAccepted) {
           var labels = story.querySelectorAll('a.label');
           Array.prototype.forEach.call(labels, function(label) {
-            if (label.textContent.match(/\b(?:blocked|blocker|high priority|urgent priority)\b/)) {
+            if (label.textContent.match(/\b(?:blocked|hot lead|blocker|high priority|urgent priority)\b/)) {
               label.classList.add('ss', 'important');
             }
           });
