@@ -29,21 +29,24 @@ chrome.extension.sendMessage({}, function(response) {
        * Main entry point to loop through all stories and to process them.
        */
       var processStories = function processStories(node) {
-        if (typeof node.querySelectorAll !== 'undefined') {
+        if (typeof node.querySelectorAll == 'undefined') {
+          return;
+        }
 
-          var stories = node.querySelectorAll('header.preview');
-          if (!stories.length) {
-            return;
-          }
-
-          // Loop through every story.
-          Array.prototype.forEach.call(stories, function (story) {
-            highlightWorkflowStates(story);
-            highlightImportantTags(story);
-            detectMergeDeployTags(story);
-            detectTimeIssues(story);
+        // Loop through every collapsed story.
+        var collapsedStories = node.querySelectorAll('header.preview');
+        if (collapsedStories.length) {
+          Array.prototype.forEach.call(collapsedStories, function (story) {
+            var storySelector = story.parentNode;
+            highlightWorkflowStates(storySelector);
+            highlightImportantTags(storySelector);
+            detectMergeDeployTags(storySelector);
+            detectTimeIssues(storySelector);
           });
         }
+
+        // Inject a button to add SystemSeed template for every story.
+        injectTemplateButton(node);
       };
 
 
@@ -67,7 +70,7 @@ chrome.extension.sendMessage({}, function(response) {
       function highlightImportantTags(story) {
 
         // We care about important tags as long as it is not accepted.
-        var storyAccepted = story.parentElement.classList.contains('accepted');
+        var storyAccepted = story.classList.contains('accepted');
         if (!storyAccepted) {
           var labels = story.querySelectorAll('a.label');
           Array.prototype.forEach.call(labels, function(label) {
@@ -120,7 +123,7 @@ chrome.extension.sendMessage({}, function(response) {
        */
       function detectMergeDeployTags(story) {
         // We care about merging only when story is accepted.
-        var storyAccepted = story.querySelector('.state.button') === null;
+        var storyAccepted = story.classList.contains('accepted');
         var storyHasBody = story.querySelector('.name') !== null;
         if (!storyAccepted || !storyHasBody) {
           return;
