@@ -26,49 +26,67 @@ function injectTemplateButton(node) {
   });
 }
 
-/*function generateTasks(e) {
+
+function generateTasks(e) {
 
   var tasks = [
-    'HTD confirmed locally',
-    'Cross-browser testing passes',
-    'Automated tests pass',
-    'HTD confirmed on staging',
+    '**===== TECHNICAL CONCEPT =====**',
+    '- TDB',
+    '**===== DEFINITION OF DONE =====**',
+    '- Acceptance criteria is confirmed by the client',
+    '- Story meets acceptance criteria',
+    '- Story includes post deploy steps (where applicable)',
+    '- Story includes testing steps',
+    '- Code passes automated tests / code checks (where applicable)',
+    '- Story is tested and peer reviewed (where applicable)',
+    '- Story has test coverage (where applicable)',
+    '- Story is documented',
+    '- Story is accepted by the client',
+    '**===== TESTING STEPS =====**',
+    '- **Test 1:** TBD'
   ];
 
-  for (task of tasks) {
-    $('.edit .TaskEdit textarea').val(task);
-    $('.edit .TaskEdit button.addTaskButton').trigger('click');
-  }
+  $('.tasks textarea').focus(function() {
+    if ($(this).is(':focus')) {
+      setTimeout(function() {
+        $('.tasks button').trigger('click');
+      }, 0);
+    }
+  });
 
-}*/
+  var initialTasksCount = $('div[data-aid="TaskShow"]').length;
+  var taskIndex = 0;
+
+  var interval = setInterval(function() {
+
+    var currentTasksCount = $('div[data-aid="TaskShow"]').length;
+
+    if (initialTasksCount + taskIndex == currentTasksCount) {
+      var $taskTextarea = $('.tasks textarea');
+
+      var task = tasks[taskIndex];
+      $taskTextarea.val(task).focus();
+
+      if (taskIndex < tasks.length - 1) {
+        taskIndex++;
+      }
+      else {
+        clearInterval(interval);
+        $taskTextarea.unbind('focus');
+      }
+    }
+
+  }, 100);
+
+}
 
 function createFeatureTemplate() {
   return (function() {/*# Problem / Motivation
-Including a detailed problem statement as part of your user stories has several benefits:
-- They ensure that the business requirements are understood.
-- They provide detail to the development team to enable them to think through the work that may need to be done.
-
-# Acceptance Criteria
-Including acceptance criteria as part of your user stories has several benefits:
-- They get the team to think through how a feature or piece of functionality will work from the user’s perspective.
-- They remove ambiguity from requirements.
-- They form the tests that will confirm that a feature or piece of functionality is working and complete.
-
-# Proposed Solution / Technical Concept
-Providing a high level technical concept as part of your user stories has several benefits:
-- They get the team to think through how a feature or piece of functionality may be implemented at a technical level.
-- They ensure that any developer that picks up the story has a good starting point.
-- They provide relevant pointers, references, code snippets and promote knowledge transfer throughout the team.
----------------
-### Sniff Test
-Is this story ready to be worked on?
-- **[ ? ]** problem statement
-- **[ ? ]** acceptance criteria
-- **[ ? ]** technical concept
-- **[ ? ]** tags / labels
-- **[ ? ]** task list
-- **[ ? ]** estimate
- */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
+   Try to make the business goal of the story as clear as possible.
+   # Acceptance Criteria
+   - Criteria 1
+   - Criteria 2
+   */}).toString().match(/[^]*\/\*([^]*)\*\/\}$/)[1];
 }
 
 function createBugTemplate() {
@@ -135,6 +153,8 @@ function generateStory(e) {
   }
 
   nextSection.find('button[id^="story_description_done_"]').trigger('click');
+
+  generateTasks();
 
   e.preventDefault();
 }

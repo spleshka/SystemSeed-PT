@@ -1,6 +1,6 @@
 {
   "name": "SystemSeed PT",
-  "version": "1.6",
+  "version": "1.7",
   "manifest_version": 2,
   "author": "Ev Maslovskiy",
   "description": "Provides integration between SystemSeed workflow and Pivotal Tracker.",
