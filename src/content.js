@@ -38,9 +38,9 @@ chrome.extension.sendMessage({}, function(response) {
         if (collapsedStories.length) {
           Array.prototype.forEach.call(collapsedStories, function (story) {
             var storySelector = story.parentNode;
-            highlightBlueStates(storySelector);
-            highlightRedTags(storySelector);
-            detectMergeDeployTags(storySelector);
+            highlightPlannerTags(storySelector);
+            highlightImportantTags(storySelector);
+            highlightGoalsTags(storySelector);
           });
         }
 
@@ -52,7 +52,7 @@ chrome.extension.sendMessage({}, function(response) {
       /**
        * Highlights tags which contain workflow states.
        */
-      function highlightPlannerStates(story) {
+      function highlightPlannerTags(story) {
         var labels = story.querySelectorAll('a.label');
         Array.prototype.forEach.call(labels, function(label) {
           if (label.textContent.match(/\b(?:planner|needs-estimate)\b/)) {
@@ -94,13 +94,6 @@ chrome.extension.sendMessage({}, function(response) {
             if (label.textContent.match(/\b(goal-b/)) {
               label.classList.add('ss', 'gray');
             }
-          });
-        }
-      }
-
-        }
-        var live = false;
-
 
 
       }
