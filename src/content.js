@@ -50,12 +50,12 @@ chrome.extension.sendMessage({}, function(response) {
 
 
       /**
-       * Highlights tags which contain workflow states.
+       * Highlights planner stories that need estimate.
        */
       function highlightPlannerTags(story) {
         var labels = story.querySelectorAll('a.label');
         Array.prototype.forEach.call(labels, function(label) {
-          if (label.textContent.match(/\b(?:planner|needs-estimate)\b/)) {
+          if (label.textContent.match(/\b(?:planner|estimate)\b/)) {
             label.classList.add('ss', 'blue');
           }
         });
