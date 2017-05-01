@@ -19,28 +19,28 @@ chrome.extension.sendMessage({}, function(response) {
        * Add observer handler.
        */
       observer.observe(document, config);
+
       var handleMutationEvents = function handleMutationEvents(mutation) {
         Array.prototype.forEach.call(mutation.addedNodes, processStories);
         processStories(mutation.target);
       };
 
-
       /**
        * Main entry point to loop through all stories and to process them.
        */
       var processStories = function processStories(node) {
-        if (typeof node.querySelectorAll == 'undefined') {
+        if (typeof node.querySelectorAll == 'undefined')
           return;
-        }
 
         // Loop through every collapsed story.
         var collapsedStories = node.querySelectorAll('header.preview');
+
         if (collapsedStories.length) {
           Array.prototype.forEach.call(collapsedStories, function (story) {
             var storySelector = story.parentNode;
             highlightPlannerTags(storySelector);
             highlightImportantTags(storySelector);
-            highlightGoalsTags(storySelector);
+            highlightGoalTags(storySelector);
           });
         }
 
@@ -55,9 +55,8 @@ chrome.extension.sendMessage({}, function(response) {
       function highlightPlannerTags(story) {
         var labels = story.querySelectorAll('a.label');
         Array.prototype.forEach.call(labels, function(label) {
-          if (label.textContent.match(/\b(?:planner|estimate)\b/)) {
+          if (label.textContent.match(/\b(?:planner|estimate)\b/))
             label.classList.add('ss', 'blue');
-          }
         });
       }
 
@@ -73,14 +72,13 @@ chrome.extension.sendMessage({}, function(response) {
         if (!storyAccepted) {
           var labels = story.querySelectorAll('a.label');
           Array.prototype.forEach.call(labels, function(label) {
-            if (label.textContent.match(/\b(?:blocked|needs|needs-|urgent\b/)) {
+            if (label.textContent.match(/\b(?:blocked|needs|needs-|urgent)\b/))
               label.classList.add('ss', 'red');
-            }
           });
         }
       }
-      
-            /**
+
+      /**
        * Highlights tags which contain goal-based labels.
        * productivity, analytics, etc.
        */
@@ -91,12 +89,11 @@ chrome.extension.sendMessage({}, function(response) {
         if (!storyAccepted) {
           var labels = story.querySelectorAll('a.label');
           Array.prototype.forEach.call(labels, function(label) {
-            if (label.textContent.match(/\b(goal-b/)) {
+            if (label.textContent.match(/goal-b/))
               label.classList.add('ss', 'gray');
-            }
-
-
+          })
+        }
       }
     }
-  }, 10);
+  }, 100);
 });
