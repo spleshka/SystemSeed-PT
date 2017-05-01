@@ -1,16 +1,18 @@
-# Red Labels for Pivotal Tracker
+# Simbi Labels for Pivotal Tracker
 
-This Chrome extension for SystemSeed workflow tweaks in Pivotal Tracker.
+This Chrome extension for Simbi workflow tweaks in Pivotal Tracker.
 
 ## Taxonomy
 
 Any of these labels on stories will turn blue:
 
-- paused
-- on hold
-- blocked
-- to <do-smth>
+- planner
+- estimate
 
 Any of these labels on stories will turn red:
-- urgent priority
-- high priority
+- blocked
+- needs-<word>
+- urgent
+
+Any of these labels on stories will turn gray:
+- goal-<word>

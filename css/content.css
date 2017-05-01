@@ -6,31 +6,18 @@
   white-space: nowrap;
 }
 
-.preview a.label.ss.workflow-state {
+.preview a.label.ss.blue {
   background: #203e64;
 }
 
-.preview a.label.ss.workflow-state:hover {
+.preview a.label.ss.blue:hover {
   background: #11213e;
 }
 
-.preview a.label.ss.important {
+.preview a.label.ss.red {
   background-color: hsl(349, 69%, 46%);
 }
 
-.preview a.label.ss.missing-tags {
-  background-color: #f39300;
-}
-
-.preview .time-overrun {
-  background: #a71f39;
-  color: white;
-  font-size: 8px;
-  padding: 0 5px;
-  border-radius: 20px;
-  position: absolute;
-  top: 25px;
-  line-height: 11px;
-  left: 22px;
-  font-weight: bold;
+.preview a.label.ss.gray {
+  background-color: #b7b7b7;
 }
