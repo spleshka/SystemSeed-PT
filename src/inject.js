@@ -30,18 +30,8 @@ function injectTemplateButton(node) {
 function generateTasks(e) {
 
   var tasks = [
-    '**===== TECHNICAL CONCEPT =====**',
+    '**===== CHECKLIST FOR ACCEPTANCE =====**',
     '- TDB',
-    '**===== DEFINITION OF DONE =====**',
-    '- Acceptance criteria is confirmed by the client',
-    '- Story meets acceptance criteria',
-    '- Story includes post deploy steps (where applicable)',
-    '- Story includes testing steps',
-    '- Code passes automated tests / code checks (where applicable)',
-    '- Story is tested and peer reviewed (where applicable)',
-    '- Story has test coverage (where applicable)',
-    '- Story is documented',
-    '- Story is accepted by the client',
     '**===== TESTING STEPS =====**',
     '- **Test 1:** TBD'
   ];
