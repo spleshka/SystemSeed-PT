@@ -14,5 +14,5 @@ Any of these labels on stories will turn red:
 - needs-<word>
 - urgent
 
-Any of these labels on stories will turn gay:
+Any of these labels on stories will turn gray:
 - goal-<word>
